@@ -124,7 +124,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// Round-0 and not last round
 		if ((n == 0) && (nrounds > 1)){
 			//if (tmp_as <= *Bn){
-				internalTruncState[n+1][0]=hw4(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
 			//}
@@ -133,7 +133,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// Round-i and not last round
 		if ((n >= 1) && (n != (nrounds - 1))){
 			//if (tmp_as <= *Bn) {
-				internalTruncState[n+1][0]=hw4(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
 			//}
@@ -142,7 +142,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// last round
 		if((n == (nrounds - 1)) && (nrounds > 1)) {
 			//if (tmp_as <= *Bn) {
-				internalTruncState[n+1][0]=hw4(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				//------------ update Bn value!!------------
 				*Bn = tmp_as;
@@ -200,7 +200,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 	// Only one round
 	if ((n == 0) && (nrounds == 1)) {
 		assert(*Bn == 2);
-		for(unsigned short diff = 1; diff < 65536; diff<<=1){
+		for(unsigned int diff = 1; diff < 65536; diff<<=1){
 					if (hw16_check_even_pos(diff)==1){ //Dont want AS first round
 						continue;
 					}
@@ -213,7 +213,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 
 	// Round-0 and not last round
 	if ((n == 0) && (nrounds > 1)) {
-		for(unsigned short diff = 1; diff < 65536; diff<<=1){
+		for(unsigned int diff = 1; diff < 65536; diff<<=1){
 				if (hw16_check_even_pos(diff)==1){ //Dont want AS first round
             		continue;
         		}
