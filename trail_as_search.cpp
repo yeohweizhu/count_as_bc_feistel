@@ -14,7 +14,11 @@ using namespace std;
 std::map<string, int> truncSet;
 
 long globalCount = 0;
+
+//Permutation is 16! if exhaustive, 16! is a large number..
 int perm[16] ={5,0,1,4,7,12,3,8,13,6,9,2,15,10,11,14}; //TWINE permutation
+
+
 
 void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 	unsigned short internalTruncState[NROUNDS + 1][2])
@@ -160,7 +164,12 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
 					//cout << hex << internalTruncState[0][1] << ", " << hex << internalTruncState[NROUNDS][1] << ", " << AS << ", 11, " << "['0011', '0000', '0001', '0010']" << endl;
 					//file << std::bitset<4>(internalTruncState[0][1]) << ", " << std::bitset<4>(internalTruncState[NROUNDS][1]) << ", " << AS << ", 19, " << std::bitset<64>(0x3012) << endl;
-					file << std::bitset<4>(internalTruncState[0][1]) << ", " << std::bitset<4>(internalTruncState[NROUNDS][1]) << ", " << AS << ", 12, " << "1, 3, 0, 2" << endl;
+					std::string perm_str = "";
+					for (int i=0;i<15;i++){
+						perm_str += ( std::to_string(perm[i]) + " ,");
+					}
+					perm_str+= std::to_string(perm[15]);
+					file << std::bitset<16>(internalTruncState[0][1]) << ", " << std::bitset<16>(internalTruncState[NROUNDS][1]) << ", " << AS << "," << NROUNDS <<  ", " << perm_str << endl;
 				}
 			//}
         }
@@ -191,7 +200,11 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 	// Only one round
 	if ((n == 0) && (nrounds == 1)) {
 		assert(*Bn == 2);
-		for(unsigned short diff = 1; diff < 16; diff++){
+		for(unsigned short diff = 1; diff < 65536; diff<<=1){
+					if (hw16_check_even_pos(diff)==1){ //Dont want AS first round
+						continue;
+					}
+
 					internalTruncState[0][0]=0;
 					internalTruncState[0][1]=diff; // plaintext differences
 					roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
@@ -200,7 +213,11 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 
 	// Round-0 and not last round
 	if ((n == 0) && (nrounds > 1)) {
-		for(unsigned short diff = 1; diff < 16; diff++){
+		for(unsigned short diff = 1; diff < 65536; diff<<=1){
+				if (hw16_check_even_pos(diff)==1){ //Dont want AS first round
+            		continue;
+        		}
+
                 internalTruncState[0][0]=0;
                 internalTruncState[0][1]=diff; // plaintext differences
                 unsigned int as = B[nrounds-1-(n+1)];  // assign B[nrounds-2] to pn,  ( B[0],...,B[nrounds-2],B[nrounds-1])
