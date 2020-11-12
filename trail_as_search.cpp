@@ -296,7 +296,23 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 					roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
 		}
 
+		ofstream file;
+		file.open("trainingdata4bit4to12(0312).txt", ios::in | ios::app);
+		file << "\n1-bit only" << std::endl;
+		file.close();
+
 		for(unsigned int diff = 1; diff < 65536; diff<<=1){
+				internalTruncState[0][0]=0;
+				internalTruncState[0][1]=diff; // plaintext differences
+				roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
+		}
+
+		ofstream file2;
+		file2.open("trainingdata4bit4to12(0312).txt", ios::in | ios::app);
+		file2 << "\n4-bit only" << std::endl;
+		file2.close();
+
+		for(unsigned int diff = 0xf; diff < 65536; diff<<=1){
 				internalTruncState[0][0]=0;
 				internalTruncState[0][1]=diff; // plaintext differences
 				roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
