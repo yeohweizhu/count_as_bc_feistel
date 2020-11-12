@@ -107,46 +107,46 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
 	int hw2=0;
 	int pos2[16] = {0};
-	if (((new_diff&0x2)!=0) && ((new_diff&0x1)!=1)){
+	if (((new_diff&0x2)!=0) && ((new_diff&0x1)==0)){
         // mask = mask | 0x2;
-		pos2[hw] = 1;
+		pos2[hw2] = 1;
         hw2++;
 	}
-	if (((new_diff&0x8)!=0) && ((new_diff&0x4)!=1)){
+	if (((new_diff&0x8)!=0) && ((new_diff&0x4)==0)){
         // mask = mask | 0x8;
-		pos2[hw] = 3;
+		pos2[hw2] = 3;
         hw2++;
 	}
-	if (((new_diff&0x20)!=0) && ((new_diff&0x10)!=1)){
+	if (((new_diff&0x20)!=0) && ((new_diff&0x10)==0)){
         // mask = mask | 0x20;
-		pos2[hw] = 5;
+		pos2[hw2] = 5;
         hw2++;
 	}
-	if (((new_diff&0x80)!=0) && ((new_diff&0x40)!=1)){
+	if (((new_diff&0x80)!=0) && ((new_diff&0x40)==0)){
         // mask = mask | 0x80;
-		pos2[hw] = 7;
+		pos2[hw2] = 7;
         hw2++;
 	}
 
-	if (((new_diff&0x200)!=0) && ((new_diff&0x100)!=1)){
+	if (((new_diff&0x200)!=0) && ((new_diff&0x100)==0)){
         // mask = mask | 0x200;
-		pos2[hw] = 9;
+		pos2[hw2] = 9;
         hw2++;
 	}
-	if (((new_diff&0x800)!=0) && ((new_diff&0x400)!=1)){
+	if (((new_diff&0x800)!=0) && ((new_diff&0x400)==0)){
         // mask = mask | 0x800;
-		pos2[hw] = 11;
+		pos2[hw2] = 11;
         hw2++;
 	}
 
-	if (((new_diff&0x2000)!=0) && ((new_diff&0x1000)!=1)){
+	if (((new_diff&0x2000)!=0) && ((new_diff&0x1000)==0)){
         // mask = mask | 0x2000;
-		pos2[hw] = 13;
+		pos2[hw2] = 13;
         hw2++;
 	}
-	if (((new_diff&0x8000)!=0) && ((new_diff&0x4000)!=1)){
+	if (((new_diff&0x8000)!=0) && ((new_diff&0x4000)==0)){
         // mask = mask | 0x8000;
-		pos2[hw] = 15;
+		pos2[hw2] = 15;
         hw2++;
 	}
 
