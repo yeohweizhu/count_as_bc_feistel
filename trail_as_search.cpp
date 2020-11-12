@@ -64,44 +64,44 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
     //Generate Mask
 	if (((new_diff&0x2)!=0) && ((new_diff&0x1)!=0)){
         // mask = mask | 0x2;
-		pos[hw] = 2;
+		pos[hw] = 1;
         hw++;
 	}
 	if (((new_diff&0x8)!=0) && ((new_diff&0x4)!=0)){
         // mask = mask | 0x8;
-		pos[hw] = 4;
+		pos[hw] = 3;
         hw++;
 	}
 	if (((new_diff&0x20)!=0) && ((new_diff&0x10)!=0)){
         // mask = mask | 0x20;
-		pos[hw] = 6;
+		pos[hw] = 5;
         hw++;
 	}
 	if (((new_diff&0x80)!=0) && ((new_diff&0x40)!=0)){
         // mask = mask | 0x80;
-		pos[hw] = 8;
+		pos[hw] = 7;
         hw++;
 	}
 
 	if (((new_diff&0x200)!=0) && ((new_diff&0x100)!=0)){
         // mask = mask | 0x200;
-		pos[hw] = 10;
+		pos[hw] = 9;
         hw++;
 	}
 	if (((new_diff&0x800)!=0) && ((new_diff&0x400)!=0)){
         // mask = mask | 0x800;
-		pos[hw] = 12;
+		pos[hw] = 11;
         hw++;
 	}
 
 	if (((new_diff&0x2000)!=0) && ((new_diff&0x1000)!=0)){
         // mask = mask | 0x2000;
-		pos[hw] = 14;
+		pos[hw] = 13;
         hw++;
 	}
 	if (((new_diff&0x8000)!=0) && ((new_diff&0x4000)!=0)){
         // mask = mask | 0x8000;
-		pos[hw] = 16;
+		pos[hw] = 15;
         hw++;
 	}
 
@@ -152,7 +152,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
 
     //Generate Mask End
-	std::cout << "HW: " << hw << endl;
+	// std::cout << "HW: " << hw << endl;
 
  	for(unsigned i=0;i<(1<<hw);i++){
 		// unsigned int tmp_as;
@@ -286,7 +286,7 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 	// Only one round
 	if ((n == 0) && (nrounds == 1)) {
 		assert(*Bn == 2);
-		for(unsigned int diff = 1; diff < 65536; diff<<=1){
+		for(unsigned int diff = 3; diff < 65536; diff<<=1){
 					if (hw16_check_even_pos(diff)==1){ //Dont want AS first round
 						// continue;
 					}
@@ -294,6 +294,12 @@ void cp_AS_threshold_search(const int n, const int nrounds, int B[NROUNDS], int*
 					internalTruncState[0][0]=0;
 					internalTruncState[0][1]=diff; // plaintext differences
 					roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
+		}
+
+		for(unsigned int diff = 1; diff < 65536; diff<<=1){
+				internalTruncState[0][0]=0;
+				internalTruncState[0][1]=diff; // plaintext differences
+				roundProcess(n, nrounds, 0, B, Bn, internalTruncState);
 		}
 	}
 
