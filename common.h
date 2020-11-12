@@ -81,7 +81,7 @@ const uint32_t diffTabOriginal[16][16]={                           // best      
 // Macros
 //NOTE: Adjust this for different number of round
 #ifndef NROUNDS
-#define NROUNDS 12 //Number of rounds being tested
+#define NROUNDS 1 //Number of rounds being tested
 #define CIPHER_SBOX_COUNT 16
 #endif
 
