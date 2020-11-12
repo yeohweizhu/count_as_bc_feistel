@@ -18,15 +18,27 @@ long globalCount = 0;
 //Permutation is 16! if exhaustive, 16! is a large number..
 // int perm[16] ={5,0,1,4,7,12,3,8,13,6,9,2,15,10,11,14}; //TWINE permutation
 int perm[16] ={1,4,5,0,13,6,9,2,7,12,3,8,11,14,15,10}; //TWINE permutation
-
-
+int perm_reverse[16]={3,0,7,10,1,2,5,8,11,6,15,12,9,4,13,14};
 
 void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 	unsigned short internalTruncState[NROUNDS + 1][2])
 {
 	ofstream file;
 	file.open("trainingdata4bit4to12(0312).txt", ios::in | ios::app);
+
 	unsigned short ori = internalTruncState[n][1];
+	if (n==0){ //If round 0 reverse the permu first.
+		unsigned int new_diff=0;
+		for (int i=0;i<16;i++){
+			if (perm_reverse[i] < i){
+				new_diff = new_diff | ( (ori & (0x1 << i)) >> (i-perm_reverse[i]) );
+			}else{
+				new_diff = new_diff | ( (ori & (0x1 << i)) << (perm_reverse[i]-i) );
+			}
+		};
+		ori = new_diff;
+	}
+	
 	unsigned short new_diff = 0;
 	unsigned short mask = 0;
 	int hw = 0;
@@ -50,44 +62,44 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
     int pos[16] = {0};
     //Generate Mask
-	if (((ori&0x2)!=0) && ((ori&0x1)!=0)){
+	if (((new_diff&0x2)!=0) && ((new_diff&0x1)!=0)){
         // mask = mask | 0x2;
 		pos[hw] = 2;
         hw++;
 	}
-	if (((ori&0x8)!=0) && ((ori&0x4)!=0)){
+	if (((new_diff&0x8)!=0) && ((new_diff&0x4)!=0)){
         // mask = mask | 0x8;
 		pos[hw] = 4;
         hw++;
 	}
-	if (((ori&0x20)!=0) && ((ori&0x10)!=0)){
+	if (((new_diff&0x20)!=0) && ((new_diff&0x10)!=0)){
         // mask = mask | 0x20;
 		pos[hw] = 6;
         hw++;
 	}
-	if (((ori&0x80)!=0) && ((ori&0x40)!=0)){
+	if (((new_diff&0x80)!=0) && ((new_diff&0x40)!=0)){
         // mask = mask | 0x80;
 		pos[hw] = 8;
         hw++;
 	}
 
-	if (((ori&0x200)!=0) && ((ori&0x100)!=0)){
+	if (((new_diff&0x200)!=0) && ((new_diff&0x100)!=0)){
         // mask = mask | 0x200;
 		pos[hw] = 10;
         hw++;
 	}
-	if (((ori&0x800)!=0) && ((ori&0x400)!=0)){
+	if (((new_diff&0x800)!=0) && ((new_diff&0x400)!=0)){
         // mask = mask | 0x800;
 		pos[hw] = 12;
         hw++;
 	}
 
-	if (((ori&0x2000)!=0) && ((ori&0x1000)!=0)){
+	if (((new_diff&0x2000)!=0) && ((new_diff&0x1000)!=0)){
         // mask = mask | 0x2000;
 		pos[hw] = 14;
         hw++;
 	}
-	if (((ori&0x8000)!=0) && ((ori&0x4000)!=0)){
+	if (((new_diff&0x8000)!=0) && ((new_diff&0x4000)!=0)){
         // mask = mask | 0x8000;
 		pos[hw] = 16;
         hw++;
@@ -95,44 +107,44 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 
 	int hw2=0;
 	int pos2[16] = {0};
-	if (((ori&0x2)!=0) && ((ori&0x1)!=1)){
+	if (((new_diff&0x2)!=0) && ((new_diff&0x1)!=1)){
         // mask = mask | 0x2;
 		pos2[hw] = 1;
         hw2++;
 	}
-	if (((ori&0x8)!=0) && ((ori&0x4)!=1)){
+	if (((new_diff&0x8)!=0) && ((new_diff&0x4)!=1)){
         // mask = mask | 0x8;
 		pos2[hw] = 3;
         hw2++;
 	}
-	if (((ori&0x20)!=0) && ((ori&0x10)!=1)){
+	if (((new_diff&0x20)!=0) && ((new_diff&0x10)!=1)){
         // mask = mask | 0x20;
 		pos2[hw] = 5;
         hw2++;
 	}
-	if (((ori&0x80)!=0) && ((ori&0x40)!=1)){
+	if (((new_diff&0x80)!=0) && ((new_diff&0x40)!=1)){
         // mask = mask | 0x80;
 		pos2[hw] = 7;
         hw2++;
 	}
 
-	if (((ori&0x200)!=0) && ((ori&0x100)!=1)){
+	if (((new_diff&0x200)!=0) && ((new_diff&0x100)!=1)){
         // mask = mask | 0x200;
 		pos2[hw] = 9;
         hw2++;
 	}
-	if (((ori&0x800)!=0) && ((ori&0x400)!=1)){
+	if (((new_diff&0x800)!=0) && ((new_diff&0x400)!=1)){
         // mask = mask | 0x800;
 		pos2[hw] = 11;
         hw2++;
 	}
 
-	if (((ori&0x2000)!=0) && ((ori&0x1000)!=1)){
+	if (((new_diff&0x2000)!=0) && ((new_diff&0x1000)!=1)){
         // mask = mask | 0x2000;
 		pos2[hw] = 13;
         hw2++;
 	}
-	if (((ori&0x8000)!=0) && ((ori&0x4000)!=1)){
+	if (((new_diff&0x8000)!=0) && ((new_diff&0x4000)!=1)){
         // mask = mask | 0x8000;
 		pos2[hw] = 15;
         hw2++;
@@ -164,7 +176,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		}
 
 		unsigned int tmp_as;
-		tmp_as = as + hw16_check_even_pos(ori);
+		tmp_as = as + hw16_check_even_pos(new_diff);
 
 		// only one round
 		if (((n == 0) && (nrounds == 1)) /*&& ((tmp_as <= *Bn))*/) {
@@ -198,7 +210,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// Round-0 and not last round
 		if ((n == 0) && (nrounds > 1)){
 			//if (tmp_as <= *Bn){
-				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(new_diff);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
 			//}
@@ -207,7 +219,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// Round-i and not last round
 		if ((n >= 1) && (n != (nrounds - 1))){
 			//if (tmp_as <= *Bn) {
-				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(new_diff);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				cp_AS_threshold_search(n+1, nrounds, B, Bn, internalTruncState);
 			//}
@@ -216,7 +228,7 @@ void roundProcess(const int n, const int nrounds, int as, int B[], int* Bn,
 		// last round
 		if((n == (nrounds - 1)) && (nrounds > 1)) {
 			//if (tmp_as <= *Bn) {
-				internalTruncState[n+1][0]=hw16_check_even_pos(ori);
+				internalTruncState[n+1][0]=hw16_check_even_pos(new_diff);
 				internalTruncState[n+1][1]=new_diff^tmp;
 				//------------ update Bn value!!------------
 				*Bn = tmp_as;
